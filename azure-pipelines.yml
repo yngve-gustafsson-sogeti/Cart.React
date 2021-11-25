@@ -1,0 +1,50 @@
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: Npm@1
+    displayName: npm install
+    inputs:
+      verbose: false
+  - task: Npm@1
+    displayName: npm custom
+    inputs:
+      command: custom
+      verbose: false
+      customCommand: run build
+  - task: CopyFiles@2
+    displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+    inputs:
+      SourceFolder: '.\build'
+      Contents: '**'
+      TargetFolder: $(build.artifactstagingdirectory)
+      CleanTargetFolder: true
+      OverWrite: true
+
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: '.\build'
+      includeRootFolder: false
+      archiveType: 'zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/BuildId.zip'
+      replaceExistingArchive: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: React'
+    inputs:
+      ArtifactName: React
+
+  # - task: AzureCLI@2
+  #   inputs:
+  #     azureSubscription: 'sc-test-ikeaorderandcreate-nonprd'
+  #     scriptType: 'ps'
+  #     scriptLocation: 'inlineScript'
+  #     inlineScript: "az storage blob upload-batch -d '$web' --account-name stordercreatetest --destination-path XXX --account-key gX9L5ovswzTP/H1VzfpgJdK0H+kyXRxeVR9ULH070Dd6JgQTC0kV6ZgpyD85NskUtPH0qy5btOS+AO/tqVXi7w== --source $(build.artifactStagingDirectory)"
