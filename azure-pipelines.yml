@@ -30,7 +30,7 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
   inputs:
-    SourceFolder: '.\build'
+    SourceFolder: './build'
     Contents: '**'
     TargetFolder: $(build.artifactstagingdirectory)
     CleanTargetFolder: true
@@ -38,7 +38,7 @@ steps:
 
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: '.\build'
+    rootFolderOrFile: './build'
     includeRootFolder: false
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/BuildId.zip'
