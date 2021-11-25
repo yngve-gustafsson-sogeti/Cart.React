@@ -9,38 +9,45 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  ResourceGroup: 'IKEA'
+  AssignmentServiceName: 'app-ordercreate-assignmentservice-test'
+  AppServiceName: 'app-pam-pull-request-test'
+  AppServiceURL: 'https://app-pam-pull-request-test'
+  URLSuffix: '.azurewebsites.net'
+
 steps:
-  - task: Npm@1
-    displayName: npm install
-    inputs:
-      verbose: false
-  - task: Npm@1
-    displayName: npm custom
-    inputs:
-      command: custom
-      verbose: false
-      customCommand: run build
-  - task: CopyFiles@2
-    displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
-    inputs:
-      SourceFolder: '.\build'
-      Contents: '**'
-      TargetFolder: $(build.artifactstagingdirectory)
-      CleanTargetFolder: true
-      OverWrite: true
+- task: Npm@1
+  displayName: npm install
+  inputs:
+    verbose: false
+- task: Npm@1
+  displayName: npm custom
+  inputs:
+    command: custom
+    verbose: false
+    customCommand: run build
+- task: CopyFiles@2
+  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+  inputs:
+    SourceFolder: '.\build'
+    Contents: '**'
+    TargetFolder: $(build.artifactstagingdirectory)
+    CleanTargetFolder: true
+    OverWrite: true
 
-  - task: ArchiveFiles@2
-    inputs:
-      rootFolderOrFile: '.\build'
-      includeRootFolder: false
-      archiveType: 'zip'
-      archiveFile: '$(Build.ArtifactStagingDirectory)/BuildId.zip'
-      replaceExistingArchive: true
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '.\build'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/BuildId.zip'
+    replaceExistingArchive: true
 
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish Artifact: React'
-    inputs:
-      ArtifactName: React
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: React'
+  inputs:
+    ArtifactName: React
 
 - task: AzureCLI@2
   inputs:
