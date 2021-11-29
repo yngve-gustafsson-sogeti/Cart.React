@@ -49,35 +49,35 @@ steps:
   inputs:
     ArtifactName: React
 
-# - task: AzureCLI@2
-#   inputs:
-#     azureSubscription: 'sc-test-ikeaorderandcreate-nonprd'
-#     scriptType: bash
-#     scriptLocation: 'inlineScript'
-#     inlineScript: 'az webapp deployment slot create --name $(AppServiceName) --resource-group $(ResourceGroup) --slot $(Build.SourceBranchName)'
-
-# - task: AzureCLI@2
-#   inputs:
-#     azureSubscription: 'sc-test-ikeaorderandcreate-nonprd'
-#     scriptType: bash
-#     scriptLocation: 'inlineScript'
-#     inlineScript: 'az webapp cors add -g $(ResourceGroup) -n $(AssignmentServiceName) --allowed-origins "$(AppServiceURL)-$(Build.SourceBranchName)$(URLSuffix)"'
-
-
-# - task: AzureRmWebAppDeployment@4
-#   inputs:
-#     ConnectionType: 'AzureRM'
-#     azureSubscription: 'sc-test-ikeaorderandcreate-nonprd'
-#     appType: 'webApp'
-#     WebAppName: '$(AppServiceName)'
-#     deployToSlotOrASE: true
-#     ResourceGroupName: '$(ResourceGroup)'
-#     SlotName: '$(Build.SourceBranchName)'
-#     packageForLinux: '$(build.artifactStagingDirectory)/**/*.zip'
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'sc-test-ikeaorderandcreate-nonprd'
+    scriptType: bash
+    scriptLocation: 'inlineScript'
+    inlineScript: 'az webapp deployment slot create --name $(AppServiceName) --resource-group $(ResourceGroup) --slot $(Build.SourceBranchName)'
 
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'sc-test-ikeaorderandcreate-nonprd'
     scriptType: bash
     scriptLocation: 'inlineScript'
-    inlineScript: "az storage blob upload-batch -d '$web' --account-name stordercreatetest --destination-path 'OOO' --account-key gX9L5ovswzTP/H1VzfpgJdK0H+kyXRxeVR9ULH070Dd6JgQTC0kV6ZgpyD85NskUtPH0qy5btOS+AO/tqVXi7w== --source $(build.artifactStagingDirectory)"
+    inlineScript: 'az webapp cors add -g $(ResourceGroup) -n $(AssignmentServiceName) --allowed-origins "$(AppServiceURL)-$(Build.SourceBranchName)$(URLSuffix)"'
+
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'sc-test-ikeaorderandcreate-nonprd'
+    appType: 'webApp'
+    WebAppName: '$(AppServiceName)'
+    deployToSlotOrASE: true
+    ResourceGroupName: '$(ResourceGroup)'
+    SlotName: '$(Build.SourceBranchName)'
+    packageForLinux: '$(build.artifactStagingDirectory)/**/*.zip'
+
+# - task: AzureCLI@2
+#   inputs:
+#     azureSubscription: 'sc-test-ikeaorderandcreate-nonprd'
+#     scriptType: bash
+#     scriptLocation: 'inlineScript'
+#     inlineScript: "az storage blob upload-batch -d '$web' --account-name stordercreatetest --destination-path 'OOO' --account-key gX9L5ovswzTP/H1VzfpgJdK0H+kyXRxeVR9ULH070Dd6JgQTC0kV6ZgpyD85NskUtPH0qy5btOS+AO/tqVXi7w== --source $(build.artifactStagingDirectory)"
